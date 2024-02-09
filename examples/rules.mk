@@ -239,6 +239,12 @@ styleclean: $(STYLECHECKFILES:=.styleclean)
 	@printf "  FLASH  $<\n"
 	$(STFLASH) write $(*).bin 0x8000000
 
+ifneq ($(OOCD_FILE),)
+%.jlink-flash: %.hex
+	@printf "  FLASH  $<\n"
+	openocd -f ${OOCD_FILE} -c 'program $(*).hex'
+endif
+
 ifeq ($(BMP_PORT),)
 ifeq ($(OOCD_FILE),)
 %.flash: %.elf
